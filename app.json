@@ -1,0 +1,7 @@
+{
+  "name": "cavern",
+  "description": "proxy to manage backends of a vault server",
+  "repository": "https://github.com/kr1sp1n/cavern",
+  "keywords": ["vault", "proxy", "backends"],
+  "image": "heroku/nodejs"
+}
