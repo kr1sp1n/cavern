@@ -16,10 +16,11 @@ You can set configs via environment variables.
 
 * `PORT` - the port of the server
 * `VAULT_ADDR` - the url to your vault server
-* `VAULT_TOKEN` - the token to access your vault server
 
 
 ## API
+
+You have to pass `X-Token: <your-github-token>` as header in every request to auth via github at your vault server.
 
 ### `GET /`
 Get all the mounted backends of a connected vault server.
