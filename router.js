@@ -3,15 +3,23 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var _ = require('lodash')
 var uuid = require('uuid')
-var vault = require('node-vault')({
-  endpoint: process.env['VAULT_ADDR']
+var vault_endpoint = process.env['VAULT_ADDR']
+var vault_token = process.env['VAULT_TOKEN']
+var root_vault = require('node-vault')({
+  endpoint: vault_endpoint,
+  token: vault_token
 })
 
 var githubAuth = function (req, res, next) {
   var token = req.headers['x-token']
   if (!token) return next('No token passed')
-  vault.write('auth/github/login', { token: token }, function (err, result) {
-    next(err)
+  root_vault.write('auth/github/login', { token: token }, function (err, result) {
+    if (err) return next(err)
+    req.vault = require('node-vault')({
+      endpoint: vault_endpoint,
+      token: result.auth.client_token
+    })
+    next()
   })
 }
 
@@ -23,7 +31,7 @@ router.use(githubAuth)
 var keys = {}
 
 var getMounts = function (req, res, next) {
-  vault.mounts(function (err, result) {
+  req.vault.mounts(function (err, result) {
     if (err) {
       debug(err)
       return next(err)
@@ -73,7 +81,7 @@ router.post('/:backend', getMounts, getBackend, function (req, res) {
     keys[backend] = []
   }
   var path = [backend, secret.id].join('/')
-  vault.write(path, { value: req.body.value }, function (err, result) {
+  req.vault.write(path, { value: req.body.value }, function (err, result) {
     if (err) debug(err)
     keys[backend].push(secret)
     res.send(secret)
@@ -84,7 +92,7 @@ router.get('/:backend/:key', getMounts, getBackend, function (req, res) {
   var backend = req.params.backend
   var key = req.params.key
   var path = [backend, key].join('/')
-  vault.read(path, function (err, result) {
+  req.vault.read(path, function (err, result) {
     if (err) debug(err)
     res.send(result)
   })

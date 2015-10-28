@@ -16,7 +16,7 @@ You can set configs via environment variables.
 
 * `PORT` - the port of the server
 * `VAULT_ADDR` - the url to your vault server
-
+* `VAULT_TOKEN - the vault token to access your vault server to do the github login
 
 ## API
 
