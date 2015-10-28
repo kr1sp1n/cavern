@@ -4,12 +4,20 @@ var bodyParser = require('body-parser')
 var _ = require('lodash')
 var uuid = require('uuid')
 var vault = require('node-vault')({
-  endpoint: process.env['VAULT_ADDR'],
-  token: process.env['VAULT_TOKEN']
+  endpoint: process.env['VAULT_ADDR']
 })
+
+var githubAuth = function (req, res, next) {
+  var token = req.headers['x-token']
+  if (!token) return next('No token passed')
+  vault.write('auth/github/login', { token: token }, function (err, result) {
+    next(err)
+  })
+}
 
 var router = express.Router()
 router.use(bodyParser.json())
+router.use(githubAuth)
 
 // key storage
 var keys = {}
