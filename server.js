@@ -2,13 +2,12 @@ var debug = require('debug')('cavern:server')
 var express = require('express')
 var pkg = require(__dirname + '/package.json')
 var http = require('http')
-var router = require(__dirname + '/router.js')
+var config = require(__dirname + '/config.js')
+var router = require(__dirname + '/router.js')(config)
 
 var app = express()
-var port = process.env['PORT'] || 3030
 
-app.set('port', port)
-
+app.set('port', config.port)
 app.use('/', router)
 
 var server = http.createServer(app)
