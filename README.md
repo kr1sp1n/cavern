@@ -18,6 +18,7 @@ You can set configs via environment variables.
 * `VAULT_ADDR` - the url to your vault server
 * `VAULT_TOKEN` - the vault token to access your vault server to do the github login
 
+
 ## API
 
 You have to pass `X-Token: <your-github-token>` as header in every request to auth via github at your vault server.
