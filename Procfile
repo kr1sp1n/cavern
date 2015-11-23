@@ -1,1 +1,1 @@
-app: $(npm bin)/node-dev server.js
+app: node server.js
