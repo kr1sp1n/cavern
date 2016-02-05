@@ -11,6 +11,7 @@ module.exports = function (config) {
   })
 
   var githubAuth = function (req, res, next) {
+    debug('githubAuth')
     var token = req.headers['x-token']
     if (!token) return next('No token passed')
     root_vault.write('auth/github/login', { token: token }, function (err, result) {
@@ -21,16 +22,28 @@ module.exports = function (config) {
       })
       next()
     })
-  }
+  };
+
+  var auth = function (req, res, next) {
+    debug('auth')
+    var token = req.headers['x-token']
+    if (!token) return next('No token passed')
+    req.vault = require('node-vault')({
+      endpoint: config.vault_endpoint,
+      token: token
+    })
+    next()
+  };
 
   var router = express.Router()
   router.use(bodyParser.json())
-  router.use(githubAuth)
+  router.use(auth)
 
   // key storage
   var keys = {}
 
   var getMounts = function (req, res, next) {
+    debug('getMounts')
     req.vault.mounts(function (err, result) {
       if (err) {
         debug(err)

@@ -1,0 +1,20 @@
+cavern:
+  image: kr1sp1n/cavern
+  ports:
+    - "3000:3000"
+  environment:
+    PORT: 3000
+    DEBUG: 'cavern*'
+    VAULT_ADDR: 'http://vault:8200'
+  links:
+    - vault
+
+vault:
+  image: kr1sp1n/vault
+  volumes:
+    - $PWD/test:/tmp/test
+  cap_add:
+    - IPC_LOCK
+  command: server -config /tmp/test/config.hcl
+  ports:
+    - "8200:8200"

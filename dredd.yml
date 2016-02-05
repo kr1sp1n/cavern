@@ -1,0 +1,25 @@
+dry-run: null
+hookfiles: test/hooks.js
+language: nodejs
+sandbox: false
+server: docker-compose up
+server-wait: 5
+init: false
+custom: {}
+names: false
+only: []
+reporter: apiary
+output: []
+header: []
+sorted: false
+user: null
+inline-errors: false
+details: false
+method: []
+color: true
+level: info
+timestamp: true
+silent: false
+path: []
+blueprint: API.md
+endpoint: 'http://dockerhost:3000'

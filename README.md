@@ -21,34 +21,8 @@ You can set configs via environment variables.
 
 ## API
 
-You have to pass `X-Token: <your-github-token>` as header in every request to auth via github at your vault server.
+See [API] specs.
 
-### `GET /`
-Get all the mounted backends of a connected vault server.
 
-### `GET /:backend`
-Get a specific mounted backend by its name.
 
-### `POST /:backend`
-Create a new secret by passing something like:
-```json
-{
-  "description": "My super secret",
-  "value": {
-    "username": "admin",
-    "password": "123"
-  }
-}
-```
-The `value` object will be written to the vault server.
-
-Returns something like:
-```json
-{
-  "id": "63090fa0-7cf8-11e5-9601-736433b13893",
-  "description": "My super secret"
-}
-```
-
-### `GET /:backend/:key`
-Get a secret out of the vault server by its generated id `:key`.
+[API]: https://github.com/kr1sp1n/node-vault/blob/master/API.md
